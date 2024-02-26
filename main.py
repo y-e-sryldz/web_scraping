@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+import requests
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -11,8 +13,12 @@ def search_yap(search):
     scraper = MedlineScraper()
     search = search.replace(" ","+")
     search_url = scraper.base_url + search
-    print(search_url)
-    return redirect(search_url)
+    response = requests.get(search_url)  # URL'ye istekte bulunun
+    if response.status_code == 200:
+        source = BeautifulSoup(response.content, "html.parser")  # Yanıt içeriğini ayrıştır
+        results = source.find_all('div', {'id': 'gs_res_ccl_mid'})
+        print(results)
+    return search_url
 
 @app.route('/',methods=['GET','POST'])
 def hello_world():
