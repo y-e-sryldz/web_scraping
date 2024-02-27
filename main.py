@@ -14,6 +14,7 @@ def search_yap(search):
     search = search.replace(" ", "+")
     search_url = scraper.base_url + search
     response = requests.get(search_url)
+    print(search_url)
     if response.status_code == 200:
         source = BeautifulSoup(response.content, "html.parser")
         results = source.find_all('div', {'class': 'gs_ri'})
@@ -35,7 +36,6 @@ def search_yap(search):
             return render_template('search_results.html', results=None)
     else:
         return render_template('search_results.html', results=None)
- # or any other valid response
 
 
 @app.route('/',methods=['GET','POST'])
