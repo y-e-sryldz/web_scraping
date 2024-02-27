@@ -35,7 +35,7 @@ def search_yap(search):
             return render_template('search_results.html', results=None)
     else:
         return render_template('search_results.html', results=None)
- # or any other valid response
+
 
 
 @app.route('/',methods=['GET','POST'])
