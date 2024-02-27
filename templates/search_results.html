@@ -3,21 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOU Academy</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <title>Search Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search_resulst.css') }}">
+
 </head>
 <body>
 <div class="google">
     <a href="#" id="google_logo"><h1>KOU Academy</h1></a>
-</div>
-
-<div class="form">
-    <form action="/" method="POST">
-        <input type="text" id="form-search" placeholder="Arama yapılacak kelimeyi giriniz" name="search">
-        <div class= "buttons">
-            <input type="submit" value="Arama Yap" id="google_search">
-        </div>
-    </form>
 </div>
 
 {% if results %}
@@ -31,6 +23,10 @@
             </li>
         {% endfor %}
     </ul>
+</div>
+{% else %}
+<div class="search-results">
+    <p>Sonuç bulunamadı.</p>
 </div>
 {% endif %}
 
