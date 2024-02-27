@@ -1,38 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOU Akademik</title>
+  <  <head>
+    <title>Google Homepage</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-</head>
-<body>
-<div class="google">
-    <a href="#" id="google_logo"><h1>KOU Akademi</h1></a>
-</div>
+  </head>
+  <body>
+    <div class="google">
+      <a href="#" id="google_logo" style="size: 500px"><h1>KOU Akademik</h1></a>
+    </div>
 
-<div class="form">
-    <form action="/" method="POST">
-        <input type="text" id="form-search" placeholder="Arama yapılacak kelimeyi giriniz" name="search">
+    <div class="form">
+      <form action="/" method="POST">
+        <label for="form-search"></label>
+        <input type="text" id="form-search" placeholder="Arama Yapıcak Kelime Girin" placeholder="search" name="search">
         <div class= "buttons">
-            <input type="submit" value="Arama Yap" id="google_search">
+          <input type="submit" value="Arama Yap" id="google_search">
         </div>
-    </form>
-</div>
-
-{% if results %}
-<div class="search-results">
-    <h2>Arama Sonuçları</h2>
-    <ul>
-        {% for result in results %}
-            <li>
-                <a href="{{ result['link_url'] }}">{{ result['link_text'] }}</a>
-                <a href="{{ result['pdf_link_url'] }}">{{ result['pdf_link_text'] }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
-
-</body>
+      </form>
+    </div>
+  </body>
 </html>
