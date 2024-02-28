@@ -1,6 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import requests
 from bs4 import BeautifulSoup
+import pymongo
+from pymongo import MongoClient
+
+connect = MongoClient("mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
+database = connect["Deneme"]
+collection = database["makale"]
+
+ornek = {"Yayın id":"a1","Yayın adı":"yazılım"}
+collection.insert_one(ornek)
+
 
 app = Flask(__name__)
 
