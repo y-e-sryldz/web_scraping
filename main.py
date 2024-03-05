@@ -1,3 +1,5 @@
+import re
+
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import requests
 from bs4 import BeautifulSoup
@@ -50,16 +52,28 @@ def search_yap(search):
                 pdf_link = pdf_item.find('a', href=True)
                 pdf_link_text = pdf_link.text.strip()
                 pdf_link_url = pdf_link['href']
+                gs_a_div = result.find('div', {'class': 'gs_a'})  # GS_A classına sahip div'i bul
+                if gs_a_div:  # Eğer GS_A classına sahip bir div bulunduysa
+                    numbers = re.findall(r'\d+', gs_a_div.text)  # Div içindeki sadece rakamları al
+                    pdf_yayin_tarihi = ''.join(numbers)  # Alınan rakamları birleştir
+                else:
+                    pdf_yayin_tarihi = None
+                gs_fl_div = result.find('div', {'class': 'gs_fl gs_flb'})  # gs_fl gs_flb sınıfına sahip div'i bul
+                if gs_fl_div:  # Eğer gs_fl gs_flb sınıfına sahip bir div bulunduysa
+                    third_a = gs_fl_div.find_all('a')[2]  # 3. <a> etiketine gir
+                    pdf_alinti_sayisi_match = re.search(r'\d+',third_a.text.strip()) if third_a else None  # Eğer 3. <a> etiketi varsa, text'ini al, yoksa None olarak ata
+                    pdf_alinti_sayisi = pdf_alinti_sayisi_match.group() if pdf_alinti_sayisi_match else None
+                else:
+                    pdf_alinti_sayisi = None
                 search_results.append({'link_text': link_text, 'link_url': link_url, 'pdf_link_text': pdf_link_text,
-                                       'pdf_link_url': pdf_link_url})
+                                       'pdf_link_url': pdf_link_url, 'pdf_yayin_tarihi': pdf_yayin_tarihi, 'pdf_alinti_sayisi': pdf_alinti_sayisi})
 
-            save_search_results(search_results,search)  # Search sonuçlarını MongoDB'ye kaydet
+            save_search_results(search_results, search)  # Search sonuçlarını MongoDB'ye kaydet
             return render_template('search_results.html', results=search_results)
         else:
             return render_template('search_results.html', results=None)
     else:
         return render_template('search_results.html', results=None)
-
 
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
