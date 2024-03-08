@@ -14,9 +14,8 @@ class MedlineScraper:
 
 
 def create_search_collection(search):
-    connect = MongoClient(
-        "mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
-    database = connect["Deneme"]
+    connect = MongoClient("mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
+    database = connect["SearchResults"]
     search = search.replace("+", " ")
     if "search" not in database.list_collection_names():
         collection = database[search]
@@ -25,10 +24,21 @@ def create_search_collection(search):
         return database[search]
 
 
-def save_search_results(results,search):
+def save_search_results(results, search):
     collection = create_search_collection(search)
+    existing_results = collection.find({})  # Veritabanında var olan tüm sonuçları al
+    existing_urls = set(result['link url'] for result in existing_results)  # Var olan sonuçların URL'lerini bir set'e al
+
+    new_results = []
     for result in results:
-        collection.insert_one(result)
+        if result['link url'] not in existing_urls:  # Eğer sonuç veritabanında yoksa
+            new_results.append(result)  # Yeni sonuç listesine ekle
+
+    if new_results:  # Eğer yeni sonuçlar varsa
+        collection.insert_many(new_results)  # Yeni sonuçları veritabanına ekle
+    else:
+        print("Tüm sonuçlar zaten veritabanında bulunuyor.")
+
 
 
 @app.route('/search-yap/<string:search>')
@@ -61,12 +71,22 @@ def search_yap(search):
                 gs_fl_div = result.find('div', {'class': 'gs_fl gs_flb'})  # gs_fl gs_flb sınıfına sahip div'i bul
                 if gs_fl_div:  # Eğer gs_fl gs_flb sınıfına sahip bir div bulunduysa
                     third_a = gs_fl_div.find_all('a')[2]  # 3. <a> etiketine gir
-                    pdf_alinti_sayisi_match = re.search(r'\d+',third_a.text.strip()) if third_a else None  # Eğer 3. <a> etiketi varsa, text'ini al, yoksa None olarak ata
+                    pdf_alinti_sayisi_match = re.search(r'\d+',
+                                                        third_a.text.strip()) if third_a else None  # Eğer 3. <a> etiketi varsa, text'ini al, yoksa None olarak ata
                     pdf_alinti_sayisi = pdf_alinti_sayisi_match.group() if pdf_alinti_sayisi_match else None
                 else:
                     pdf_alinti_sayisi = None
-                search_results.append({'link_text': link_text, 'link_url': link_url, 'pdf_link_text': pdf_link_text,
-                                       'pdf_link_url': pdf_link_url, 'pdf_yayin_tarihi': pdf_yayin_tarihi, 'pdf_alinti_sayisi': pdf_alinti_sayisi})
+
+                gs_a_div = result.find('div', {'class': 'gs_a'})  # GS_A classına sahip div'i bul
+                if gs_a_div:  # Eğer GS_A classına sahip bir div bulunduysa
+                    text_until_dash = gs_a_div.text.split('-')[0].strip()  # Div içindeki metni - işaretine kadar al
+                    pdf_yazarlar = re.sub(r'\s+', ' ', text_until_dash)  # Birden fazla boşlukları tek boşluk yap
+                else:
+                    pdf_yazarlar = None
+
+                search_results.append({'yayin adi': link_text, 'link url': link_url, 'pdf link text': pdf_link_text,
+                                       'pdf link url': pdf_link_url, 'pdf yayımlanma tarihi': pdf_yayin_tarihi,
+                                       'pdf alinti sayisi': pdf_alinti_sayisi, 'Yazarlar': pdf_yazarlar})
 
             save_search_results(search_results, search)  # Search sonuçlarını MongoDB'ye kaydet
             return render_template('search_results.html', results=search_results)

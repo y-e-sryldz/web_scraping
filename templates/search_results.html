@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arama Sonuçları</title>
+    <script>
+        function sortBy(order_by, ascending) {
+            // AJAX isteği gönderme
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById("search-results").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open("GET", "/search?order_by=" + order_by + "&ascending=" + ascending, true);
+            xhr.send();
+        }
+    </script>
 </head>
 <body>
 <div class="google">
@@ -13,11 +26,13 @@
 {% if results %}
 <div class="search-results">
     <h2>Arama Sonuçları</h2>
+    <button onclick="sortBy('pdf_alinti_sayisi', true)">Sırala (Artan)</button>
+    <button onclick="sortBy('pdf_alinti_sayisi', false)">Sırala (Azalan)</button>
     <ul>
         {% for result in results %}
             <li>
-                <a href="{{ result['link_url'] }}">{{ result['link_text'] }}</a>
-                <a href="{{ result['pdf_link_url'] }}">{{ result['pdf_link_text'] }}</a>
+                <a href="{{ result['link_url'] }}">{{ result['yayin adi'] }}</a>
+                <a href="{{ result['pdf_link_url'] }}">{{ result['pdf link text'] }}</a>
             </li>
         {% endfor %}
     </ul>
