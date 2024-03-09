@@ -1,24 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <  <head>
-    <meta charset="UTF-8">
-    <title>KOU Akademik</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-  </head>
-  <body>
-    <div class="google">
-      <a href="#" id="google_logo" style="size: 500px"><h1>KOU Akademik</h1></a>
-    </div>
+<head>
+<meta charset="UTF-8">
+<title>KOU Akademik</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+<div class="google">
+<a href="#" id="google_logo"><h1><span style="color: #2E8B57;">KOU</span> <span style="font-size: 36px;">Akademik</span></h1></a>
+</div>
 
-    <div class="form">
-      <form action="/" method="POST">
-        <label for="form-search"></label>
-        <input type="text" id="form-search" placeholder="Arama Yapıcak Kelime Girin" placeholder="search" name="search">
-        <div class= "buttons">
-          <input type="submit" value="Arama Yap" id="google_search">
-        </div>
-      </form>
-    </div>
-  </body>
+<div class="form">
+<form action="/" method="POST">
+<label for="form-search"></label>
+<div class="input-container">
+<input type="text" id="form-search" placeholder="Arama Yapılacak Kelimeyi Girin" name="search">
+<span class="material-symbols-outlined">
+search
+</span>
+</div>
+<div class= "buttons">
+<input type="submit" value="Arama Yap" id="google_search">
+</div>
+</form>
+</div>
+</body>
 </html>

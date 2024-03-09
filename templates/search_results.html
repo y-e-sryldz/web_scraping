@@ -4,23 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arama Sonuçları</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search_results.css') }}">
 </head>
 <body>
-<div class="google">
-    <a href="#" id="google_logo"><h1>KOU Akademi</h1></a>
+<div class="google" id="google-header">
+     <span id="favicon-container"><img src="img/icon.ico" alt="Favicon" id="favicon"></span>
+    <a href="#" id="google_logo"><h1>KOU Akademik</h1></a>
 </div>
 
-<div class="search-results">
-    <h2>Arama Sonuçları</h2>
-    <button onclick="sortBy('asc')">Sırala (Artan)</button>
-    <button onclick="sortBy('desc')">Sırala (Azalan)</button>
-    <ul id="search-results">
+<div class="search-results" id="search-results-container">
+    <h2 class="search-results-title">Arama Sonuçları</h2>
+    <button onclick="sortBy('asc')" class="sort-button" id="asc-button">Sırala (Artan)</button>
+    <button onclick="sortBy('desc')" class="sort-button" id="desc-button">Sırala (Azalan)</button>
+    <ul class="search-results-list" id="search-results-list">
         {% if results %}
             {% for result in results %}
-                <li>
-                    <a href="{{ result['link url'] }}">{{ result['yayin adi'] }}</a>
-                    <a href="{{ result['pdf link url'] }}">{{ result['pdf link text'] }}</a>
-                    <span>Alıntı Sayısı: {{ result['pdf alinti sayisi'] }}</span>
+                <li class="search-result-item">
+                    <a href="{{ result['link url'] }}" class="result-link">{{ result['yayin adi'] }}</a>
+                    <a href="{{ result['pdf link url'] }}" class="pdf-link">{{ result['pdf link text'] }}</a>
+                    <span class="citation-count">Alıntı Sayısı: {{ result['pdf alinti sayisi'] }}</span>
                 </li>
             {% endfor %}
         {% else %}
@@ -36,7 +38,7 @@
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                document.getElementById("search-results").innerHTML = xhr.responseText;
+                document.getElementById("search-results-list").innerHTML = xhr.responseText;
             }
         };
         xhr.open("GET", "/search?order_by=pdf_alinti_sayisi&ascending=" + (order === 'asc'), true);
