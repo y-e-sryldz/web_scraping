@@ -17,7 +17,7 @@ def create_search_collection(search):
     connect = MongoClient("mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
     database = connect["SearchResults"]
     search = search.replace("+", " ")
-    if "search" not in database.list_collection_names():
+    if search not in database.list_collection_names():  # Burada search değişkeninin içeriğini kontrol ediyoruz, search string olmalı.
         collection = database[search]
         return collection
     else:
@@ -94,6 +94,27 @@ def search_yap(search):
             return render_template('search_results.html', results=None)
     else:
         return render_template('search_results.html', results=None)
+
+
+@app.route('/search')
+def search():
+    order_by = request.args.get('order_by')
+    ascending = request.args.get('ascending')
+    search = request.args.get('search')
+
+    if search is None:
+        return "Arama ifadesi belirtilmedi."
+
+    # Veritabanından arama sonuçlarını al
+    collection = create_search_collection(search)
+    results = list(collection.find({}))
+
+    # Alıntı sayısına göre sıralama
+    if order_by == 'pdf_alinti_sayisi' and ascending:
+        results.sort(key=lambda x: int(x.get('pdf alinti sayisi', 0)), reverse=(ascending.lower() == 'true'))
+
+    return render_template('search_results.html', results=results)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():

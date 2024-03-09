@@ -4,44 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arama Sonuçları</title>
-    <script>
-        function sortBy(order_by, ascending) {
-            // AJAX isteği gönderme
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById("search-results").innerHTML = xhr.responseText;
-                }
-            };
-            xhr.open("GET", "/search?order_by=" + order_by + "&ascending=" + ascending, true);
-            xhr.send();
-        }
-    </script>
 </head>
 <body>
 <div class="google">
     <a href="#" id="google_logo"><h1>KOU Akademi</h1></a>
 </div>
 
-{% if results %}
 <div class="search-results">
     <h2>Arama Sonuçları</h2>
-    <button onclick="sortBy('pdf_alinti_sayisi', true)">Sırala (Artan)</button>
-    <button onclick="sortBy('pdf_alinti_sayisi', false)">Sırala (Azalan)</button>
-    <ul>
-        {% for result in results %}
-            <li>
-                <a href="{{ result['link_url'] }}">{{ result['yayin adi'] }}</a>
-                <a href="{{ result['pdf_link_url'] }}">{{ result['pdf link text'] }}</a>
-            </li>
-        {% endfor %}
+    <button onclick="sortBy('asc')">Sırala (Artan)</button>
+    <button onclick="sortBy('desc')">Sırala (Azalan)</button>
+    <ul id="search-results">
+        {% if results %}
+            {% for result in results %}
+                <li>
+                    <a href="{{ result['link url'] }}">{{ result['yayin adi'] }}</a>
+                    <a href="{{ result['pdf link url'] }}">{{ result['pdf link text'] }}</a>
+                    <span>Alıntı Sayısı: {{ result['pdf alinti sayisi'] }}</span>
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>Sonuç bulunamadı.</p>
+        {% endif %}
     </ul>
 </div>
-{% else %}
-<div class="search-results">
-    <p>Sonuç bulunamadı.</p>
-</div>
-{% endif %}
+
+<script>
+    function sortBy(order) {
+        console.log("Merhaba, dünya!"); // Bu kod, "Merhaba, dünya!" yazısını konsola yazdıracaktır.
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById("search-results").innerHTML = xhr.responseText;
+            }
+        };
+        xhr.open("GET", "/search?order_by=pdf_alinti_sayisi&ascending=" + (order === 'asc'), true);
+        xhr.send();
+
+    }
+</script>
 
 </body>
 </html>
