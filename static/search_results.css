@@ -16,7 +16,7 @@ body {
 }
 
 .search-results {
-    max-width: 800px;
+    max-width: 1800px;
     margin: 20px auto;
     background-color: white;
     padding: 20px;
@@ -105,3 +105,54 @@ span {
 #azalan_button:hover {
     background-color: #45a049;
 }
+.search-box {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.input-container {
+    position: relative;
+    display: table-cell;
+}
+
+#form-search {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+.material-symbols-outlined {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #777;
+}
+
+.buttons {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#google_search {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#pdf-link {
+    float: right;
+}
+
+
+#google_search:hover {
+    background-color: #45a049;
+}
+

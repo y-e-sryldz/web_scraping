@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arama Sonuçları</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search_results.css') }}">
+
 </head>
 <body>
 <div class="google">
@@ -12,20 +13,41 @@
 </div>
 
 <div class="search-results">
-    <h2>Aranan Kelime: </h2>
-    <a id="once_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_once">Yayımlanma Tarihi (Önce)</a>
-    <a id="sonra_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_sonra">Yayımlanma Tarihi (Sonra)</a>
-    <a id="artan_button" href="/search?q={{ arama_kelimesi }}&order_by=alinti_sayisi_artan">Alıntı Sayısı (Artan)</a>
-    <a id="azalan_button" href="/search?q={{ arama_kelimesi }}&order_by=alinti_sayisi_azalan">Alıntı Sayısı (Azalan)</a>
+    <div class="search-box">
+        <form action="/" method="POST">
+            <label for="form-search"></label>
+            <div class="input-container">
 
+                <input type="text" id="form-search" placeholder="Arama Yapılacak Kelimeyi Girin" name="search" value="{{ arama_kelimesi }}">
+                <span class="material-symbols-outlined">
+
+                </span>
+                <input class= "buttons" type="submit" value="Arama Yap" id="google_search">
+            </div>
+        </form>
+    </div>
+    <h2>Arama Sonuçları</h2>
+    <div class="sorting-buttons">
+        <a id="once_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_once">Yayımlanma Tarihi (Önce)</a>
+        <a id="sonra_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_sonra">Yayımlanma Tarihi (Sonra)</a>
+        <a id="artan_button" href="/search?q={{ arama_kelimesi }}&order_by=alinti_sayisi_artan">Alıntı Sayısı (Artan)</a>
+        <a id="azalan_button" href="/search?q={{ arama_kelimesi }}&order_by=alinti_sayisi_azalan">Alıntı Sayısı (Azalan)</a>
+    </div>
 
     <ul id="search-results">
         {% if results %}
             {% for result in results %}
                 <li>
                     <a href="{{ result['link url'] }}">{{ result['yayin adi'] }}</a>
-                    <a href="{{ result['pdf link url'] }}">{{ result['pdf link text'] }}</a>
-                    <span>Alıntı Sayısı: {{ result['pdf alinti sayisi'] }}</span>
+                    <span style="display: block; text-align: right;" id="pdf-link"><a href="{{ result['pdf link url'] }}">{{ result['pdf link text'] }}</a></span>
+
+                    <div>
+                        <span><b>Yazarlar:</b> {{ result['Yazarlar'] }}</span>
+                        <span><b>Yayımlanma Yılı:</b> {{ result['pdf yayımlanma tarihi'] }}</span>
+                        <span><b>Alıntı Sayısı:</b> {{ result['pdf alinti sayisi'] }}</span>
+
+                    </div>
+
                 </li>
             {% endfor %}
         {% else %}
@@ -62,10 +84,7 @@
     xhr.open("GET", searchQuery, true);
     xhr.send();
 }
-
 </script>
-
-
 
 </body>
 </html>
