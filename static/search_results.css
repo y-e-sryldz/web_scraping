@@ -85,3 +85,23 @@ span {
     vertical-align: middle;
     margin: 0;
 }
+#once_button,
+#sonra_button,
+#artan_button,
+#azalan_button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#once_button:hover,
+#sonra_button:hover,
+#artan_button:hover,
+#azalan_button:hover {
+    background-color: #45a049;
+}

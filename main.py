@@ -1,12 +1,13 @@
 import re
-
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
 app = Flask(__name__)
-
+connect = MongoClient("mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
+database = connect["SearchResults"]
+app.secret_key = 'bu_gizli_anahtar_cok_guvenli_olmali'
 
 class MedlineScraper:
     def __init__(self):
@@ -14,8 +15,7 @@ class MedlineScraper:
 
 
 def create_search_collection(search):
-    connect = MongoClient("mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
-    database = connect["SearchResults"]
+
     search = search.replace("+", " ")
     if search not in database.list_collection_names():  # Burada search değişkeninin içeriğini kontrol ediyoruz, search string olmalı.
         collection = database[search]
@@ -95,31 +95,38 @@ def search_yap(search):
     else:
         return render_template('search_results.html', results=None)
 
+@app.route('/search', methods=['GET'])
+def filtrele():
+    arama = session.get('user_id')
+    arama_kelimesi = arama.replace("+", " ")
+    order_by = request.args.get('order_by')  # Sıralama kriteri
+    ascending = int(request.args.get('ascending', 1))  # Artan veya azalan sıralama
 
-@app.route('/search')
-def search():
-    order_by = request.args.get('order_by')
-    ascending = request.args.get('ascending')
-    search = request.args.get('search')
-
-    if search is None:
-        return "Arama ifadesi belirtilmedi."
+    if arama_kelimesi is None or arama_kelimesi == '':
+        # Arama ifadesi belirtilmediğinde veya boş bir ifade geldiğinde
+        return "Arama ifadesi belirtilmedi veya boş."
 
     # Veritabanından arama sonuçlarını al
-    collection = create_search_collection(search)
+    collection = database[arama_kelimesi]  # Arama kelimesini koleksiyon adı olarak kullan
     results = list(collection.find({}))
 
-    # Alıntı sayısına göre sıralama
-    if order_by == 'pdf_alinti_sayisi' and ascending:
-        results.sort(key=lambda x: int(x.get('pdf alinti sayisi', 0)), reverse=(ascending.lower() == 'true'))
+    # Sıralama yap
+    if order_by == 'yayin_tarihi_once':
+        results.sort(key=lambda x: int(x.get('pdf yayımlanma tarihi', 0)), reverse=(ascending == 1))
+    elif order_by == 'yayin_tarihi_sonra':
+        results.sort(key=lambda x: int(x.get('pdf yayımlanma tarihi', 0)), reverse=(ascending == 0))
+    elif order_by == 'alinti_sayisi_artan':
+        results.sort(key=lambda x: int(x.get('pdf alinti sayisi', 0)), reverse=False)
+    elif order_by == 'alinti_sayisi_azalan':
+        results.sort(key=lambda x: int(x.get('pdf alinti sayisi', 0)), reverse=True)
 
     return render_template('search_results.html', results=results)
-
 
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     if request.method == 'POST':
         search = request.form['search']
+        session['user_id'] = search
         return redirect(url_for('search_yap', search=search))
     else:
         return render_template('main.html')

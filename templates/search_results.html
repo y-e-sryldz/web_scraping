@@ -7,22 +7,25 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search_results.css') }}">
 </head>
 <body>
-<div class="google" id="google-header">
-     <span id="favicon-container"><img src="img/icon.ico" alt="Favicon" id="favicon"></span>
-    <a href="#" id="google_logo"><h1>KOU Akademik</h1></a>
+<div class="google">
+    <a href="#" id="google_logo"><h1>KOU Akademi</h1></a>
 </div>
 
-<div class="search-results" id="search-results-container">
-    <h2 class="search-results-title">Arama Sonuçları</h2>
-    <button onclick="sortBy('asc')" class="sort-button" id="asc-button">Sırala (Artan)</button>
-    <button onclick="sortBy('desc')" class="sort-button" id="desc-button">Sırala (Azalan)</button>
-    <ul class="search-results-list" id="search-results-list">
+<div class="search-results">
+    <h2>Aranan Kelime: </h2>
+    <a id="once_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_once">Yayımlanma Tarihi (Önce)</a>
+    <a id="sonra_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_sonra">Yayımlanma Tarihi (Sonra)</a>
+    <a id="artan_button" href="/search?q={{ arama_kelimesi }}&order_by=alinti_sayisi_artan">Alıntı Sayısı (Artan)</a>
+    <a id="azalan_button" href="/search?q={{ arama_kelimesi }}&order_by=alinti_sayisi_azalan">Alıntı Sayısı (Azalan)</a>
+
+
+    <ul id="search-results">
         {% if results %}
             {% for result in results %}
-                <li class="search-result-item">
-                    <a href="{{ result['link url'] }}" class="result-link">{{ result['yayin adi'] }}</a>
-                    <a href="{{ result['pdf link url'] }}" class="pdf-link">{{ result['pdf link text'] }}</a>
-                    <span class="citation-count">Alıntı Sayısı: {{ result['pdf alinti sayisi'] }}</span>
+                <li>
+                    <a href="{{ result['link url'] }}">{{ result['yayin adi'] }}</a>
+                    <a href="{{ result['pdf link url'] }}">{{ result['pdf link text'] }}</a>
+                    <span>Alıntı Sayısı: {{ result['pdf alinti sayisi'] }}</span>
                 </li>
             {% endfor %}
         {% else %}
@@ -33,19 +36,36 @@
 
 <script>
     function sortBy(order) {
-        console.log("Merhaba, dünya!"); // Bu kod, "Merhaba, dünya!" yazısını konsola yazdıracaktır.
+    var xhr = new XMLHttpRequest();
 
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                document.getElementById("search-results-list").innerHTML = xhr.responseText;
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                document.getElementById("search-results").innerHTML = xhr.responseText;
+            } else {
+                console.log("Hata: " + xhr.status);
+                alert("Arama sırasında bir hata oluştu.");
             }
-        };
-        xhr.open("GET", "/search?order_by=pdf_alinti_sayisi&ascending=" + (order === 'asc'), true);
-        xhr.send();
+        }
+    };
 
-    }
+    // Sıralama parametreleri
+    var orderBy = 'pdf_alinti_sayisi'; // Sıralama sütunu
+    var ascending = (order === 'asc') ? 'true' : 'false'; // Artan ya da azalan sıralama
+
+    // Arama kelimesini almak için URL'den parçalama işlemi
+    var searchKeyword = window.location.pathname.split('/')[2];
+
+    // Arama sorgusu oluşturma
+    var searchQuery = "/search/" + searchKeyword + "?order_by=" + orderBy + "&ascending=" + ascending;
+
+    xhr.open("GET", searchQuery, true);
+    xhr.send();
+}
+
 </script>
+
+
 
 </body>
 </html>
