@@ -1,73 +1,74 @@
 body {
-margin: 0;
-padding: 0;
-font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 header {
-width: 100%;
+    width: 100%;
 }
 
 a {
-text-decoration: none;
-color: inherit;
-}
-
-.google #google_logo {
-text-align: center;
-display: block;
-margin: 0 auto;
-clear: both;
-padding-top: 112px;
-padding-bottom: 20px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .form {
-text-align: center;
+    text-align: center;
+    margin-top: 150px;
 }
 
 #form-search {
-width: 400px;
-line-height: 32px;
-padding: 20px 10px;
-border-radius: 10px; /* Köşeleri yuvarlak yap */
-padding-right: 50px; /* Sağ tarafa arama yapma butonu için alan bırak */
+    width: 400px;
+    line-height: 32px;
+    padding: 20px 10px;
+    border-radius: 10px;
+    padding-right: 50px;
 }
 
 .form #form-search {
-padding: 0 8px;
+    padding: 0 8px;
 }
 
 .input-container {
-position: relative;
+    position: relative;
 }
 
 .input-container i {
-position: absolute;
-right: 10px;
-top: 50%;
-transform: translateY(-50%);
-color: #aaa;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
 }
 
 .buttons {
-text-align: center;
-padding-top: 30px;
-margin-bottom: 100px;
+    text-align: center;
+    padding-top: 30px;
+    margin-bottom: 100px;
 }
 
 .buttons input[type="submit"] {
-padding: 10px 20px;
-font-size: 18px;
-background-color: #45a049;
-color: white;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-transition: all 0.3s ease;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #45a049;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .buttons input[type="submit"]:hover {
-background-color: #228B22;
+    background-color: #228B22;
 }
+
+.kou-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 40px;
+}
+
 

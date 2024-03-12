@@ -6,7 +6,7 @@ body {
 }
 
 .google {
-    background-color: #2E8B57;
+    background-color: #45a049;
     padding: 20px;
 }
 
@@ -25,12 +25,12 @@ body {
 }
 
 .search-results h2 {
-    color: #2E8B57;
+    color: #45a049;
     margin-top: 0;
 }
 
 .search-results button {
-    background-color: #2E8B57;
+    background-color: #45a049;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -70,8 +70,8 @@ span {
 
 #favicon-container {
     display: inline-block;
-    width: 32px; /* Favicon genişliği */
-    height: 32px; /* Favicon yüksekliği */
+    width: 32px;
+    height: 32px;
     overflow: hidden;
 }
 
@@ -90,7 +90,7 @@ span {
 #artan_button,
 #azalan_button {
     display: inline-block;
-    background-color: #4CAF50;
+    background-color: #4CAF49;
     color: white;
     padding: 10px 20px;
     margin: 5px;
@@ -103,7 +103,7 @@ span {
 #sonra_button:hover,
 #artan_button:hover,
 #azalan_button:hover {
-    background-color: #45a049;
+    background-color: #228B22;
 }
 .search-box {
     margin-bottom: 20px;
@@ -153,6 +153,29 @@ span {
 
 
 #google_search:hover {
-    background-color: #45a049;
+    background-color: #228B22;
 }
 
+h2 {
+    text-align: relative;
+    margin-top: 50px;
+    font-size: 28px;
+    color: #2E8B57;
+  }
+  h2 span {
+    font-weight: normal;
+  }
+  h2 span b {
+    font-weight: bold;
+  }
+
+.kou.icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.kou.icon img {
+    height: 40px; /* İstenilen yükseklik */
+    width: auto; /* Otomatik genişlik */
+    margin-right: 10px; /* İkon ile yazı arasındaki boşluk */
+}
