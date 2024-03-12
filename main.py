@@ -46,12 +46,11 @@ def spell_check(text):
 
     corrected_text = ""
     for word in words:
-
-        if spell.correction(word) == word:
+        correction = spell.correction(word)
+        if correction == word:
             corrected_text += word + " "
         else:
-
-            corrected_text += spell.correction(word) + " "
+            corrected_text += correction + " " if correction else word + " "
 
     return corrected_text.strip()
 
@@ -138,7 +137,8 @@ def filtrele():
 def hello_world():
     if request.method == 'POST':
         search = request.form['search']
-        session['user_id'] = search
+        session['user_id'] = spell_check(search)
+        search = spell_check(search)
         return redirect(url_for('search_yap', search=search))
     else:
         return render_template('main.html')

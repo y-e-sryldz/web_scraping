@@ -83,7 +83,7 @@ span {
 #google_logo h1 {
     display: inline-block;
     vertical-align: middle;
-    margin: 0;
+    margin-bottom: 10px;
 }
 #once_button,
 #sonra_button,
@@ -169,13 +169,8 @@ h2 {
     font-weight: bold;
   }
 
-.kou.icon {
-    display: inline-flex;
-    align-items: center;
-}
-
-.kou.icon img {
-    height: 40px; /* İstenilen yükseklik */
-    width: auto; /* Otomatik genişlik */
-    margin-right: 10px; /* İkon ile yazı arasındaki boşluk */
+.kou-icon  {
+    height: 50px;
+    width: auto;
+    margin-right: 10px;
 }
