@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arama Sonuçları</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search_results.css') }}">
-
 </head>
 <body>
 <div class="google">
@@ -17,12 +16,10 @@
         <form action="/" method="POST">
             <label for="form-search"></label>
             <div class="input-container">
-
                 <input type="text" id="form-search" placeholder="Arama Yapılacak Kelimeyi Girin" name="search" value="{{ arama_kelimesi }}">
                 <span class="material-symbols-outlined">
-
                 </span>
-                <input class= "buttons" type="submit" value="Arama Yap" id="google_search">
+                <input class="buttons" type="submit" value="Arama Yap" id="google_search">
             </div>
         </form>
     </div>
@@ -45,9 +42,7 @@
                         <span><b>Yazarlar:</b> {{ result['Yazarlar'] }}</span>
                         <span><b>Yayımlanma Yılı:</b> {{ result['pdf yayımlanma tarihi'] }}</span>
                         <span><b>Alıntı Sayısı:</b> {{ result['pdf alinti sayisi'] }}</span>
-
                     </div>
-
                 </li>
             {% endfor %}
         {% else %}
@@ -83,7 +78,7 @@
 
     xhr.open("GET", searchQuery, true);
     xhr.send();
-}
+    }
 </script>
 
 </body>

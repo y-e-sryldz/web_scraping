@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+from spellchecker import SpellChecker
 
 app = Flask(__name__)
 connect = MongoClient("mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
@@ -39,11 +40,27 @@ def save_search_results(results, search):
     else:
         print("Tüm sonuçlar zaten veritabanında bulunuyor.")
 
+def spell_check(text):
+    spell = SpellChecker()
 
+    # Metni kelimelere ayır
+    words = text.split()
+
+    corrected_text = ""
+    for word in words:
+        # Eğer kelime doğru yazılmışsa, aynı şekilde bırak
+        if spell.correction(word) == word:
+            corrected_text += word + " "
+        else:
+            # Eğer kelime yanlış yazılmışsa, doğru halini kullan
+            corrected_text += spell.correction(word) + " "
+
+    return corrected_text.strip()  # Baştaki ve sondaki gereksiz boşlukları kaldır
 
 @app.route('/search-yap/<string:search>')
 def search_yap(search):
     scraper = MedlineScraper()
+
     search = search.replace(" ", "+")
     search_url = scraper.base_url + search
     response = requests.get(search_url)
@@ -126,7 +143,8 @@ def filtrele():
 def hello_world():
     if request.method == 'POST':
         search = request.form['search']
-        session['user_id'] = search
+        session['user_id'] = spell_check(search)
+        search = spell_check(search)
         return redirect(url_for('search_yap', search=search))
     else:
         return render_template('main.html')
