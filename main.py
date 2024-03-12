@@ -60,7 +60,6 @@ def spell_check(text):
 @app.route('/search-yap/<string:search>')
 def search_yap(search):
     scraper = MedlineScraper()
-
     search = search.replace(" ", "+")
     search_url = scraper.base_url + search
     response = requests.get(search_url)
@@ -106,11 +105,12 @@ def search_yap(search):
                                        'pdf alinti sayisi': pdf_alinti_sayisi, 'Yazarlar': pdf_yazarlar})
 
             save_search_results(search_results, search)  # Search sonuçlarını MongoDB'ye kaydet
-            return render_template('search_results.html', results=search_results)
+            search = search.replace("+", " ")
+            return render_template('search_results.html', results=search_results,search_term=search)
         else:
-            return render_template('search_results.html', results=None)
+            return render_template('search_results.html', results=None,search_term=search)
     else:
-        return render_template('search_results.html', results=None)
+        return render_template('search_results.html', results=None,search_term=search)
 
 @app.route('/search', methods=['GET'])
 def filtrele():

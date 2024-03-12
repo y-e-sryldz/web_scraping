@@ -24,6 +24,9 @@
         </form>
     </div>
     <h2>Arama Sonuçları</h2>
+    {% if search_term %}
+        <h2>{{ search_term }} Kelimesi İçin Arama Yapıldı</h2>
+    {% endif %}
     <div class="sorting-buttons">
         <a id="once_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_once">Yayımlanma Tarihi (Önce)</a>
         <a id="sonra_button" href="/search?q={{ arama_kelimesi }}&order_by=yayin_tarihi_sonra">Yayımlanma Tarihi (Sonra)</a>
