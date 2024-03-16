@@ -2,26 +2,30 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f2f2f2;
 }
 
 .google {
-    background-color: #45a049;
+    background-color: #f2f2f2;
     padding: 20px;
+    margin-top: 30px;
+
 }
 
 .google h1 {
-    color: white;
+    color: #000;
     margin: 0;
 }
 
+
 .search-results {
-    max-width: 1800px;
-    margin: 20px auto;
+    max-width: 1750px;
+    margin: 0px auto 20px;
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
 }
 
 .search-results h2 {
@@ -60,12 +64,9 @@ a {
 }
 
 a:hover {
-    color: #2E8B57;
+    color: #228B22;
 }
 
-span {
-    color: #888;
-}
 
 
 #favicon-container {
@@ -83,8 +84,10 @@ span {
 #google_logo h1 {
     display: inline-block;
     vertical-align: middle;
-    margin-bottom: 10px;
+    margin: 0;
+    margin-bottom: 30px;
 }
+
 #once_button,
 #sonra_button,
 #artan_button,
@@ -107,30 +110,54 @@ span {
 }
 .search-box {
     margin-bottom: 20px;
-    text-align: center;
+    text-align: left;
 }
 
 .input-container {
     position: relative;
-    display: table-cell;
+
 }
+
+.input-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+}
+
+.buttons {
+    text-align: center;
+    padding-top: 20px;
+
+}
+
+.buttons input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #45a049;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.buttons input[type="submit"]:hover {
+    background-color: #228B22;
+}
+
 
 #form-search {
-    width: 300px;
-    padding: 10px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    width: 400px;
+    line-height: 32px;
+    padding: 5px 5px;
+    border-radius: 10px;
+    padding-right: 50px;
+    border: 1px solid #ddd;
+    background-color: #fff;
 }
 
-.material-symbols-outlined {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    font-size: 20px;
-    color: #777;
-}
 
 .buttons {
     margin-top: 10px;
@@ -140,7 +167,7 @@ span {
 #google_search {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #4CAF50;
+    background-color: #4CAF49;
     color: white;
     border: none;
     border-radius: 5px;
@@ -169,8 +196,14 @@ h2 {
     font-weight: bold;
   }
 
-.kou-icon  {
-    height: 50px;
+
+.kou-icon {
+    height: 65px;
     width: auto;
     margin-right: 10px;
+}
+#form-search:focus {
+    outline: none;
+    border-color: #000;
+    box-shadow: none;
 }

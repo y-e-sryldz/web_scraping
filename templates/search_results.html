@@ -10,16 +10,14 @@
 <body>
 <div class="google">
     <img src="https://upload.wikimedia.org/wikipedia/tr/1/1a/Kouyenilogo.png" alt="kocaeli üniversitesi" title="kocaeli üniversitesi" class="kou-icon">
-    <a href="#" id="google_logo"><h1>KOU Akademik</h1></a>
-</div>
-
-<div class="search-results">
+     <a href="#" id="google_logo"><h1><span style="color: #45a049; font-size: 45px;">KOU</span> <span style="font-size: 45px; color=black;">Akademik</span></h1></a>
     <div class="search-box">
         <form action="/" method="POST">
             <label for="form-search"></label>
             <div class="input-container">
 
-                <input type="text" id="form-search" placeholder="Arama Yapılacak Kelimeyi Girin" name="search" value="{{ arama_kelimesi }}">
+
+                <input style="font-size:16px" type="text" id="form-search" placeholder="Arama Yapılacak Kelimeyi Girin" name="search" value="{{ arama_kelimesi }}">
                 <span class="material-symbols-outlined">
 
                 </span>
@@ -27,6 +25,10 @@
             </div>
         </form>
     </div>
+</div>
+
+<div class="search-results">
+
     {% if search_term %}
     <h2>"{{ search_term }}" <span><b>Kelimesi İçin Arama Sonuçları</b></span></h2>
     {% endif %}
@@ -41,13 +43,13 @@
         {% if results %}
             {% for result in results %}
                 <li>
-                    <a href="{{ result['link url'] }}">{{ result['yayin adi'] }}</a>
-                    <span style="display: block; text-align: right;" id="pdf-link"><a href="{{ result['pdf link url'] }}">{{ result['pdf link text'] }}</a></span>
+                    <a href="{{ result['Link Url'] }}">{{ result['Yayın Adı'] }}</a>
+                    <span style="display: block; text-align: right;" id="pdf-link"><a href="{{ result['Url'] }}">{{ result['Pdf Text'] }}</a></span>
 
                     <div>
                         <span><b>Yazarlar:</b> {{ result['Yazarlar'] }}</span>
-                        <span><b>Yayımlanma Yılı:</b> {{ result['pdf yayımlanma tarihi'] }}</span>
-                        <span><b>Alıntı Sayısı:</b> {{ result['pdf alinti sayisi'] }}</span>
+                        <span><b>Yayımlanma Yılı:</b> {{ result['Yayımlanma Tarihi'] }}</span>
+                        <span><b>Alıntı Sayısı:</b> {{ result['Alıntı Sayısı'] }}</span>
 
                     </div>
 
@@ -75,8 +77,8 @@
     };
 
 
-    var orderBy = 'pdf_alinti_sayisi';
-    var ascending = (order === 'asc') ? 'true' : 'false';
+    var orderBy = 'pdf_alinti_sayisi'; // Sıralama sütunu
+    var ascending = (order === 'asc') ? 'true' : 'false'; // Artan ya da azalan sıralama
 
 
     var searchKeyword = window.location.pathname.split('/')[2];

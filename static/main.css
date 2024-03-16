@@ -2,20 +2,28 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
+    background-color: #f2f2f2;
 }
 
 header {
     width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
 }
 
 a {
     text-decoration: none;
     color: inherit;
 }
+#pdf-link {
+    float: right;
+}
 
 .form {
     text-align: center;
-    margin-top: 150px;
+    margin-top: 50px;
 }
 
 #form-search {
@@ -24,10 +32,12 @@ a {
     padding: 20px 10px;
     border-radius: 10px;
     padding-right: 50px;
+    border: 1px solid #ddd;
+    background-color: #fff;
 }
 
 .form #form-search {
-    padding: 0 8px;
+    padding: 3px 15px;
 }
 
 .input-container {
@@ -44,7 +54,7 @@ a {
 
 .buttons {
     text-align: center;
-    padding-top: 30px;
+    padding-top: 20px;
     margin-bottom: 100px;
 }
 
@@ -75,3 +85,78 @@ a {
     height: auto;
     margin-right: 10px;
 }
+
+.sonuc-goster {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+
+}
+
+.sonuc-goster button {
+    background-color: #45a049;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sonuc-goster button:hover {
+    background-color: #228B22;
+}
+
+
+.sonuc-goster-container {
+    max-width: 1600px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.collection-name {
+        color: #45a049;
+}
+
+#pdf-link:hover
+#link-url:hover {
+        color: #228B22;
+
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+.sonuc:hover {
+    color: #228B22;
+}
+
+
+#form-search:focus {
+    outline: none;
+    border-color: #000;
+    box-shadow: none;
+}
+
+
+

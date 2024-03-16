@@ -4,16 +4,19 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from spellchecker import SpellChecker
+import os
+
+
 
 app = Flask(__name__)
 connect = MongoClient("mongodb+srv://nevasarac:p8VUTFzTom0ANOxC@atlascluster.gh1liqu.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster")
 database = connect["SearchResults"]
 app.secret_key = 'bu_gizli_anahtar_cok_guvenli_olmali'
+save_folder = r'D:\PythonProject\web_scraping\pdfler'
 
 class MedlineScraper:
     def __init__(self):
         self.base_url = "https://scholar.google.com/scholar?hl=tr&as_sdt=0%2C5&q="
-
 
 def create_search_collection(search):
 
@@ -28,11 +31,11 @@ def create_search_collection(search):
 def save_search_results(results, search):
     collection = create_search_collection(search)
     existing_results = collection.find({})
-    existing_urls = set(result['link url'] for result in existing_results)
+    existing_urls = set(result['Link Url'] for result in existing_results)
 
     new_results = []
     for result in results:
-        if result['link url'] not in existing_urls:
+        if result['Link Url'] not in existing_urls:
             new_results.append(result)
 
     if new_results:
@@ -53,6 +56,14 @@ def spell_check(text):
             corrected_text += correction + " " if correction else word + " "
 
     return corrected_text.strip()
+
+def clean_filename(filename):
+
+    cleaned_filename = re.sub(r'[<>:"/\\|?*]', ' ', filename)
+    return cleaned_filename
+
+def is_pdf_downloaded(file_name):
+    return os.path.exists(file_name)
 
 @app.route('/search-yap/<string:search>')
 def search_yap(search):
@@ -76,6 +87,9 @@ def search_yap(search):
                 pdf_link_text = pdf_link.text.strip()
                 pdf_link_url = pdf_link['href']
                 gs_a_div = result.find('div', {'class': 'gs_a'})
+
+
+
                 if gs_a_div:
                     numbers = re.findall(r'\d+', gs_a_div.text)
                     pdf_yayin_tarihi = ''.join(numbers)
@@ -96,7 +110,19 @@ def search_yap(search):
                 else:
                     pdf_yazarlar = None
 
-                search_results.append({'yayin adi': link_text, 'link url': link_url, 'pdf link text': pdf_link_text,'pdf link url': pdf_link_url, 'pdf yayımlanma tarihi': pdf_yayin_tarihi,'pdf alinti sayisi': pdf_alinti_sayisi, 'Yazarlar': pdf_yazarlar})
+                search_results.append({'Yayın Adı': link_text,'Yazarlar': pdf_yazarlar,'Yayımlanma Tarihi': pdf_yayin_tarihi,'Anahtar Kelimeler': search,'Alıntı Sayısı': pdf_alinti_sayisi,'Url': pdf_link_url, 'Pdf Text': pdf_link_text,'Link Url': link_url})
+
+                link_text_cleaned = clean_filename(link_text)
+                pdf_link_text_cleaned = clean_filename(pdf_link_text)
+                file_name = os.path.join("C:\\Users\\Emre\\PycharmProjects\\web_scraping\\pdfler",f"{link_text_cleaned}_{pdf_link_text_cleaned}.pdf")
+                if not is_pdf_downloaded(file_name):
+                    pdf_response = requests.get(pdf_link_url)
+                    if pdf_response.status_code == 200:
+                        with open(file_name, 'wb') as f:
+                            f.write(pdf_response.content)
+                    else:
+                        print(f"PDF indirme hatası: {pdf_link_url}")
+
 
             save_search_results(search_results, search)
             search = search.replace("+", " ")
@@ -123,15 +149,33 @@ def filtrele():
 
 
     if order_by == 'yayin_tarihi_once':
-        results.sort(key=lambda x: int(x.get('pdf yayımlanma tarihi', 0)), reverse=(ascending == 1))
+        results.sort(key=lambda x: int(x.get('Yayımlanma Tarihi', 0)), reverse=(ascending == 1))
     elif order_by == 'yayin_tarihi_sonra':
-        results.sort(key=lambda x: int(x.get('pdf yayımlanma tarihi', 0)), reverse=(ascending == 0))
+        results.sort(key=lambda x: int(x.get('Yayımlanma Tarihi', 0)), reverse=(ascending == 0))
     elif order_by == 'alinti_sayisi_artan':
-        results.sort(key=lambda x: int(x.get('pdf alinti sayisi', 0)), reverse=False)
+        results.sort(key=lambda x: int(x.get('Alıntı Sayısı', 0)), reverse=False)
     elif order_by == 'alinti_sayisi_azalan':
-        results.sort(key=lambda x: int(x.get('pdf alinti sayisi', 0)), reverse=True)
+        results.sort(key=lambda x: int(x.get('Alıntı Sayısı', 0)), reverse=True)
 
     return render_template('search_results.html', results=results,search_term=arama_kelimesi)
+
+
+@app.route('/arama-goster', methods=['GET'])
+def arama_goster():
+
+    collections_data = {}
+
+
+    collection_names = database.list_collection_names()
+
+
+    for collection_name in collection_names:
+        collection = database[collection_name]
+        collection_documents = list(collection.find({}))
+        collections_data[collection_name] = collection_documents
+
+    return render_template('main.html', collections_data=collections_data)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
@@ -141,8 +185,7 @@ def hello_world():
         search = spell_check(search)
         return redirect(url_for('search_yap', search=search))
     else:
-        return render_template('main.html')
-
+        return arama_goster()
 
 if __name__ == '__main__':
     app.run()
